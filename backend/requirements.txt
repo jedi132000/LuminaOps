@@ -1,0 +1,89 @@
+# Core FastAPI & Web Framework
+fastapi==0.110.0
+uvicorn[standard]==0.27.0
+pydantic==2.6.0
+pydantic-settings==2.1.0
+python-multipart==0.0.6
+aiofiles==23.2.1
+python-dotenv==1.0.0
+
+# Database & Storage
+sqlalchemy==2.0.23
+aiosqlite==0.19.0
+chromadb==0.4.18
+weaviate-client==3.25.3
+
+# AI/ML Core Frameworks
+torch>=2.0.0
+transformers>=4.30.0
+sentence-transformers>=2.2.0
+langchain>=0.0.300
+openai>=1.0.0
+anthropic>=0.7.0
+
+# Vector Databases & Embeddings
+faiss-cpu>=1.7.0
+# pinecone-client>=2.2.0  # Optional
+
+# MLOps & Experiment Tracking
+mlflow>=2.8.0
+# wandb>=0.15.0  # Optional
+# dvc>=3.20.0    # Optional
+
+# Data Processing & Analysis
+pandas>=2.0.0
+numpy>=1.24.0
+# polars>=0.18.0  # Optional
+# dask[complete]>=2023.5.0  # Optional
+
+# Machine Learning Libraries
+scikit-learn>=1.3.0
+xgboost>=1.7.0
+lightgbm>=4.0.0
+# catboost>=1.2.0  # Optional
+optuna>=3.0.0
+
+# Deep Learning & Computer Vision (Optional)
+# torchvision>=0.15.0
+# opencv-python>=4.8.0
+# pillow>=10.0.0
+
+# NLP & Language Models (Optional)
+# spacy>=3.6.0
+# nltk>=3.8.0
+# huggingface-hub>=0.16.0
+
+# AutoML & Model Selection
+# auto-sklearn>=0.15.0  # Linux only
+flaml>=2.0.0
+
+# Model Deployment & Serving (Optional)
+# ray[serve]>=2.6.0
+# bentoml>=1.1.0
+
+# Monitoring & Observability
+prometheus-client==0.19.0
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+
+# Security & Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# API & Communication
+httpx==0.25.2
+websockets==12.0
+
+# Testing & Quality
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+# Development Tools
+black==23.10.1
+isort==5.12.0
+pre-commit==3.5.0
+
+# GPU Acceleration (Optional)
+# cupy-cuda12x==12.3.0
+# rapids-cudf-cu12==23.12.*
