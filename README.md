@@ -150,6 +150,37 @@ User Request → React Frontend → FastAPI Backend → AI Services → Response
 
 ## 🚦 Getting Started
 
+### Quick Start (Recommended)
+```bash
+# Start everything with one command
+./start_luminaops.sh
+```
+
+### Manual Start
+```bash
+# Start backend server
+cd /Users/oladimejioladipo/Lumiaops/backend
+PYTHONPATH=/Users/oladimejioladipo/Lumiaops/backend \
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python \
+-m uvicorn main:app --reload --port 8000
+
+# In another terminal, run examples
+cd /Users/oladimejioladipo/Lumiaops/examples
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python quick_test.py
+```
+
+### Test Everything Works
+```bash
+# Quick validation
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python examples/quick_test.py
+
+# Full demo
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python examples/demo_data_usage.py
+
+# Web interface
+open examples/demo_web_interface.html
+```
+
 ### Prerequisites
 
 - **Node.js 18+** and npm

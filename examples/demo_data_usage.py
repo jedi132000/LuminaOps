@@ -1,4 +1,23 @@
-#!/usr/bin/env python3
+#!/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python
+"""
+LuminaOps Data Usage Demo Script
+
+This script demonstrates how to use the sample datasets with the LuminaOps API.
+Run this to test AI Assistant and AutoML features with real data.
+
+Prerequisites:
+1. Start the LuminaOps backend server with venv:
+   cd /Users/oladimejioladipo/Lumiaops/backend
+   PYTHONPATH=/Users/oladimejioladipo/Lumiaops/backend \
+   /Users/oladimejioladipo/Lumiaops/backend/venv/bin/python \
+   -m uvicorn main:app --reload --port 8000
+
+2. Ensure datasets are in /Users/oladimejioladipo/Lumiaops/data/ directory
+3. Virtual environment includes: requests, pandas, matplotlib
+
+Usage:
+    /Users/oladimejioladipo/Lumiaops/backend/venv/bin/python demo_data_usage.py [--skip-ai] [--skip-automl]
+"""python3
 """
 LuminaOps Data Usage Demo Script
 
@@ -27,7 +46,7 @@ import requests
 # Configuration
 BASE_URL = "http://localhost:8000"
 API_BASE = f"{BASE_URL}/api/v1/ai"
-DATA_DIR = Path(__file__).parent.parent / "data"
+DATA_DIR = Path("/Users/oladimejioladipo/Lumiaops/data")
 
 class LuminaOpsDemo:
     def __init__(self):
@@ -45,7 +64,10 @@ class LuminaOpsDemo:
             pass
         
         print("❌ Server not running! Please start the backend first:")
-        print("   cd backend && PYTHONPATH=. python -m uvicorn main:app --port 8000")
+        print("   cd /Users/oladimejioladipo/Lumiaops/backend")
+        print("   PYTHONPATH=/Users/oladimejioladipo/Lumiaops/backend \\")
+        print("   /Users/oladimejioladipo/Lumiaops/backend/venv/bin/python \\")
+        print("   -m uvicorn main:app --reload --port 8000")
         return False
     
     def load_datasets(self):

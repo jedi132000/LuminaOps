@@ -17,8 +17,10 @@ This directory contains comprehensive examples demonstrating how to use the samp
 
 ### 1. Start the Backend Server
 ```bash
-cd ../backend
-PYTHONPATH=. python -m uvicorn main:app --port 8000
+cd /Users/oladimejioladipo/Lumiaops/backend
+PYTHONPATH=/Users/oladimejioladipo/Lumiaops/backend \
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python \
+-m uvicorn main:app --reload --port 8000
 ```
 
 ### 2. Choose Your Demo Method
@@ -31,37 +33,35 @@ open demo_web_interface.html
 
 #### Option B: Python Script
 ```bash
-# Install dependencies
-pip install requests pandas matplotlib
-
-# Run demo
-python demo_data_usage.py
+# Dependencies already in venv
+# Run demo with virtual environment
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python demo_data_usage.py
 ```
 
 #### Option C: Jupyter Notebook
 ```bash
-# Install jupyter
-pip install jupyter matplotlib seaborn
+# Install jupyter in venv if not available
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/pip install jupyter matplotlib seaborn
 
-# Start notebook
-jupyter notebook Interactive_Data_Examples.ipynb
+# Start notebook with venv
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/jupyter notebook Interactive_Data_Examples.ipynb
 ```
 
 ## 📊 Sample Datasets
 
-### 1. `../data/sample.csv` - Simple Customer Data
+### 1. `/Users/oladimejioladipo/Lumiaops/data/sample.csv` - Simple Customer Data
 - **Records**: 20 customers
 - **Features**: age, income, purchase_amount, satisfaction_score
 - **Target**: churn (0=retained, 1=churned)
 - **Use Case**: Quick testing and basic churn prediction
 
-### 2. `../data/dummy.csv` - Rich Customer Dataset
+### 2. `/Users/oladimejioladipo/Lumiaops/data/dummy.csv` - Rich Customer Dataset
 - **Records**: 50+ customers with comprehensive data
 - **Features**: Demographics, behavior, transactions (20 columns)
 - **Target**: churn prediction with advanced features
 - **Use Case**: Production-grade model training
 
-### 3. `../data/model_metrics_timeseries.csv` - Model Performance
+### 3. `/Users/oladimejioladipo/Lumiaops/data/model_metrics_timeseries.csv` - Model Performance
 - **Records**: 80+ time series measurements
 - **Metrics**: accuracy, latency, throughput, error_rate over time
 - **Use Case**: Model monitoring and performance prediction
@@ -145,26 +145,29 @@ jupyter notebook Interactive_Data_Examples.ipynb
 curl http://localhost:8000/health
 
 # Start backend if needed
-cd ../backend && python -m uvicorn main:app --port 8000
+cd /Users/oladimejioladipo/Lumiaops/backend
+PYTHONPATH=/Users/oladimejioladipo/Lumiaops/backend \
+/Users/oladimejioladipo/Lumiaops/backend/venv/bin/python \
+-m uvicorn main:app --reload --port 8000
 ```
 
 #### File Not Found Error
 ```bash
 # Ensure you're in the examples directory
 pwd
-# Should show: .../LuminaOps/examples
+# Should show: /Users/oladimejioladipo/Lumiaops/examples
 
 # Check data files exist
-ls ../data/
+ls /Users/oladimejioladipo/Lumiaops/data/
 # Should show: dummy.csv, sample.csv, model_metrics_timeseries.csv
 ```
 
 #### API Key Configuration
 ```bash
 # Check if OpenAI API key is configured
-grep OPENAI_API_KEY ../backend/.env
+grep OPENAI_API_KEY /Users/oladimejioladipo/Lumiaops/backend/.env
 
-# If missing, add to backend/.env:
+# If missing, add to /Users/oladimejioladipo/Lumiaops/backend/.env:
 # OPENAI_API_KEY=your_api_key_here
 ```
 
@@ -223,4 +226,4 @@ grep OPENAI_API_KEY ../backend/.env
 
 **Happy Learning with LuminaOps! 🚀**
 
-For more information, see the main [README.md](../README.md) and [API documentation](../docs/API_REFERENCE.md).
+For more information, see the main [README.md](/Users/oladimejioladipo/Lumiaops/README.md) and [API documentation](/Users/oladimejioladipo/Lumiaops/docs/API_REFERENCE.md).
