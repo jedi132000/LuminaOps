@@ -141,6 +141,63 @@ export const monitoringAPI = {
     const response = await api.get('/monitoring/system-health')
     return response.data
   },
+
+  // Enhanced monitoring endpoints
+  getAlerts: async (status?: string) => {
+    const response = await api.get('/monitoring/alerts', {
+      params: status ? { status } : {}
+    })
+    return response.data
+  },
+
+  resolveAlert: async (alertId: string) => {
+    const response = await api.post(`/monitoring/alerts/${alertId}/resolve`)
+    return response.data
+  },
+
+  executeRemediation: async (alertId: string, action: string) => {
+    const response = await api.post(`/monitoring/alerts/${alertId}/remediate`, {
+      action
+    })
+    return response.data
+  },
+
+  getModelPerformance: async () => {
+    const response = await api.get('/monitoring/model-performance')
+    return response.data
+  },
+
+  getResourceUsage: async () => {
+    const response = await api.get('/monitoring/resources')
+    return response.data
+  },
+
+  getHistoricalMetrics: async (metric: string, timeRange: string) => {
+    const response = await api.get('/monitoring/historical', {
+      params: { metric, timeRange }
+    })
+    return response.data
+  },
+
+  exportMetrics: async (format: string = 'csv') => {
+    const response = await api.get('/monitoring/export', {
+      params: { format },
+      responseType: 'blob'
+    })
+    return response.data
+  },
+
+  getSystemLogs: async (component: string, lines: number = 100) => {
+    const response = await api.get('/monitoring/logs', {
+      params: { component, lines }
+    })
+    return response.data
+  },
+
+  getTraces: async (traceId: string) => {
+    const response = await api.get(`/monitoring/traces/${traceId}`)
+    return response.data
+  }
 }
 
 // AI Services API
