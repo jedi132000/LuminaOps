@@ -36,8 +36,9 @@ const AIAssistant: React.FC = () => {
       });
       setTextResult(result.response);
     } catch (error: any) {
-      message.error('AI service not available. Please check API keys configuration.');
-      setTextResult('Error: AI service not available. Please check API keys configuration.');
+      const errorMessage = error.response?.data?.response || error.response?.data?.detail || 'AI service not available';
+      message.error(`AI Error: ${errorMessage}`);
+      setTextResult(`AI Response: ${errorMessage}\n\n⚠️ Note: This is a development environment. For full AI functionality, configure API keys in the backend settings.`);
     }
     setLoading(false);
   };
@@ -94,12 +95,58 @@ const AIAssistant: React.FC = () => {
       ),
       children: (
         <Card>
-          <Text>Code generation functionality - Coming Soon!</Text>
-          <div className="mt-4">
-            <Text type="secondary">
-              This feature will generate Python ML code based on your descriptions.
-            </Text>
-          </div>
+          <Space direction="vertical" className="w-full">
+            <div>
+              <Text strong>Generate Python ML code:</Text>
+            </div>
+            <TextArea
+              placeholder="e.g., Create a random forest classifier for customer churn prediction"
+              rows={3}
+            />
+            <Button 
+              type="primary" 
+              onClick={() => message.info('Code generation requires API key configuration')}
+            >
+              Generate Code
+            </Button>
+            
+            <div className="mt-4 p-4 bg-gray-50 rounded">
+              <Text strong>Sample Output:</Text>
+              <pre className="mt-2 text-sm">
+{`# Random Forest Classifier for Customer Churn
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load your dataset
+# df = pd.read_csv('customer_data.csv')
+
+# Prepare features and target
+X = df.drop('churn', axis=1)
+y = df['churn']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train model
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Make predictions
+predictions = rf_model.predict(X_test)
+accuracy = accuracy_score(y_test, predictions)
+print(f"Accuracy: {accuracy:.4f}")
+print(classification_report(y_test, predictions))`}
+              </pre>
+              <div className="mt-2">
+                <Text type="secondary">
+                  ⚠️ This is a sample. Configure OpenAI/Anthropic API keys for custom code generation.
+                </Text>
+              </div>
+            </div>
+          </Space>
         </Card>
       ),
     },

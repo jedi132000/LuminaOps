@@ -144,6 +144,11 @@ const AutoMLTraining: React.FC = () => {
                   ✓ {uploadedFile.name} ready for training
                 </Text>
               )}
+              <div className="mt-3">
+                <Text type="secondary" className="text-xs">
+                  💡 Try our sample datasets: dummy.csv (50 records) or sample.csv (20 records) from /data/ directory
+                </Text>
+              </div>
             </Form.Item>
 
             <Form.Item
@@ -275,12 +280,20 @@ const AutoMLTraining: React.FC = () => {
 
       {/* Models List */}
       <Card title="Trained Models" className="mt-6">
-        <Table 
-          dataSource={models}
-          columns={modelColumns}
-          rowKey="id"
-          pagination={{ pageSize: 5 }}
-        />
+        {models.length === 0 ? (
+          <div className="text-center py-8">
+            <Text type="secondary">
+              No models trained yet. Upload a dataset and start training to see your models here.
+            </Text>
+          </div>
+        ) : (
+          <Table 
+            dataSource={models}
+            columns={modelColumns}
+            rowKey="id"
+            pagination={{ pageSize: 5 }}
+          />
+        )}
       </Card>
     </div>
   );

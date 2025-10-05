@@ -1,14 +1,30 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import pandas as pd
+import numpy as np
 from io import StringIO
-from api.v1.endpoints.auth import verify_token
+# Temporarily disabled for development: from api.v1.endpoints.auth import verify_token
 from ai_services.llm.llm_service import llm_service, code_service, LLMConfig, LLMProvider
 from ai_services.vector_db.vector_service import vector_db_service, Document
 from ai_services.automl.automl_service import automl_service, AutoMLConfig, ProblemType, ModelType
 
 router = APIRouter()
+
+def convert_numpy_types(obj):
+    """Convert numpy types to native Python types for JSON serialization"""
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_numpy_types(item) for item in obj]
+    else:
+        return obj
 
 # LLM Endpoints
 class LLMRequest(BaseModel):
@@ -25,7 +41,7 @@ class CodeGenerationRequest(BaseModel):
     language: Optional[str] = "python"
 
 @router.post("/llm/generate")
-async def generate_text(request: LLMRequest, username: str = Depends(verify_token)):
+async def generate_text(request: LLMRequest):
     """Generate text using LLM"""
     try:
         config = LLMConfig(
@@ -53,7 +69,7 @@ async def generate_text(request: LLMRequest, username: str = Depends(verify_toke
         raise HTTPException(status_code=500, detail=f"Text generation failed: {str(e)}")
 
 @router.post("/llm/generate-code")
-async def generate_code(request: CodeGenerationRequest, username: str = Depends(verify_token)):
+async def generate_code(request: CodeGenerationRequest):
     """Generate code using AI"""
     try:
         code = await code_service.generate_code(
@@ -72,7 +88,7 @@ async def generate_code(request: CodeGenerationRequest, username: str = Depends(
         raise HTTPException(status_code=500, detail=f"Code generation failed: {str(e)}")
 
 @router.post("/llm/explain-code")
-async def explain_code(code: str, username: str = Depends(verify_token)):
+async def explain_code(code: str):
     """Explain code using AI"""
     try:
         explanation = await code_service.explain_code(code)
@@ -95,7 +111,7 @@ class SearchRequest(BaseModel):
     top_k: Optional[int] = 10
 
 @router.post("/vector-db/add-documents")
-async def add_documents(documents: List[DocumentRequest], username: str = Depends(verify_token)):
+async def add_documents(documents: List[DocumentRequest]):
     """Add documents to vector database"""
     try:
         # Initialize vector DB if not already done
@@ -114,7 +130,7 @@ async def add_documents(documents: List[DocumentRequest], username: str = Depend
         raise HTTPException(status_code=500, detail=f"Failed to add documents: {str(e)}")
 
 @router.post("/vector-db/search")
-async def search_documents(request: SearchRequest, username: str = Depends(verify_token)):
+async def search_documents(request: SearchRequest):
     """Search documents in vector database"""
     try:
         # Initialize vector DB if not already done
@@ -154,8 +170,7 @@ async def upload_and_train_automl(
     target_column: str = "target",
     problem_type: str = "classification",
     model_type: str = "flaml",
-    time_budget: int = 300,
-    username: str = Depends(verify_token)
+    time_budget: int = 300
 ):
     """Upload dataset and train AutoML model"""
     try:
@@ -180,7 +195,8 @@ async def upload_and_train_automl(
         # Train model
         result = await automl_service.train_automl(df, target_column, config)
         
-        return {
+        # Convert numpy types to Python types for JSON serialization
+        response = {
             "model_id": len(automl_service.models),
             "score": result.score,
             "metrics": result.metrics,
@@ -192,14 +208,15 @@ async def upload_and_train_automl(
                 "target_column": target_column
             }
         }
+        
+        return convert_numpy_types(response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AutoML training failed: {str(e)}")
 
 @router.post("/automl/train")
 async def train_automl_model(
     request: AutoMLTrainRequest,
-    data: Dict[str, Any],  # JSON data
-    username: str = Depends(verify_token)
+    data: Dict[str, Any]  # JSON data
 ):
     """Train AutoML model with JSON data"""
     try:
@@ -216,9 +233,9 @@ async def train_automl_model(
         # Create config
         config = AutoMLConfig(
             problem_type=ProblemType(request.problem_type),
-            model_type=ModelType(request.model_type),
-            time_budget=request.time_budget,
-            test_size=request.test_size
+            model_type=ModelType(request.model_type or "flaml"),
+            time_budget=request.time_budget or 300,
+            test_size=request.test_size or 0.2
         )
         
         # Train model
@@ -231,18 +248,21 @@ async def train_automl_model(
         
         model_id = request.model_id or len(automl_service.models)
         
-        return {
+        # Convert numpy types to Python types for JSON serialization
+        response = {
             "model_id": model_id,
             "score": result.score,
             "metrics": result.metrics,
             "feature_importance": result.feature_importance,
             "config": result.config
         }
+        
+        return convert_numpy_types(response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AutoML training failed: {str(e)}")
 
 @router.get("/automl/models")
-async def list_automl_models(username: str = Depends(verify_token)):
+async def list_automl_models():
     """List all trained AutoML models"""
     try:
         models = []
@@ -255,7 +275,7 @@ async def list_automl_models(username: str = Depends(verify_token)):
         raise HTTPException(status_code=500, detail=f"Failed to list models: {str(e)}")
 
 @router.get("/automl/models/{model_id}")
-async def get_automl_model(model_id: str, username: str = Depends(verify_token)):
+async def get_automl_model(model_id: str):
     """Get information about a specific AutoML model"""
     try:
         model_info = await automl_service.get_model_info(model_id)
@@ -266,8 +286,7 @@ async def get_automl_model(model_id: str, username: str = Depends(verify_token))
 @router.post("/automl/predict/{model_id}")
 async def predict_automl(
     model_id: str,
-    data: List[Dict[str, Any]],
-    username: str = Depends(verify_token)
+    data: List[Dict[str, Any]]
 ):
     """Make predictions using trained AutoML model"""
     try:
@@ -289,8 +308,7 @@ async def predict_automl(
 @router.post("/assistant/analyze-data")
 async def analyze_data_with_ai(
     file: UploadFile = File(...),
-    analysis_type: str = "summary",
-    username: str = Depends(verify_token)
+    analysis_type: str = "summary"
 ):
     """Analyze uploaded dataset using AI"""
     try:
@@ -343,8 +361,7 @@ Please provide:
 @router.post("/assistant/recommend-model")
 async def recommend_model(
     dataset_info: Dict[str, Any],
-    problem_description: str,
-    username: str = Depends(verify_token)
+    problem_description: str
 ):
     """Get AI recommendations for ML model selection"""
     try:

@@ -82,6 +82,12 @@ class LLMService:
         """Generate text using specified or default LLM"""
         config = config or self.default_config
         
+        # Initialize provider if not already initialized
+        if config.provider not in self.providers:
+            initialized = await self.initialize_provider(config)
+            if not initialized:
+                return f"Error generating text: Failed to initialize {config.provider.value} client"
+        
         try:
             if config.provider == LLMProvider.OPENAI:
                 return await self._generate_openai(prompt, config, system_prompt)
