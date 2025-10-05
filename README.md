@@ -1,126 +1,294 @@
 # LuminaOps - Next-Generation AI/ML & Analytics Platform
 
-LuminaOps is a modular, cloud-native AI/ML platform empowering enterprises to rapidly develop, deploy, and monitor machine learning and analytics solutions at scale.
+LuminaOps is a comprehensive, cloud-native AI/ML platform that empowers enterprises to rapidly develop, deploy, and monitor machine learning and analytics solutions at scale. With integrated AI assistance, automated ML capabilities, and intelligent workflow management, LuminaOps accelerates your journey from data to insights.
 
-## 🚀 Features
+## 🚀 Core Features
 
+### 🤖 AI-Powered Platform
+- **AI Assistant**: Integrated LLM-powered assistant for code generation, explanations, and ML guidance
+- **AutoML Training**: Automated machine learning with FLAML, Auto-sklearn, and TPOT integration
+- **Intelligent Code Generation**: AI-driven Python ML code generation and optimization
+- **Smart Data Analysis**: Automated insights and recommendations from uploaded datasets
+- **Model Recommendations**: AI-powered suggestions for optimal ML models based on your data
+
+### 🛠 Core ML Operations
 - **Data Lakehouse**: Centralized, governed storage for batch and streaming data
-- **ML Pipeline Orchestration**: Visual and API-driven workflow engine
-- **Experiment Tracking**: Intuitive experiment explorer and metrics comparison
-- **Model Registry**: Versioned model catalog with lifecycle management
-- **Deployment Management**: Automated, scalable model/API deployment
-- **Monitoring & Observability**: Real-time metrics and drift detection
-- **Compliance & Security**: Role-based access and audit logs
-- **Developer Experience**: Jupyter integration and agentic automation
+- **ML Pipeline Orchestration**: Visual and API-driven workflow engine with intelligent automation
+- **Advanced Experiment Tracking**: Comprehensive experiment management with AI-assisted optimization
+- **Model Registry**: Versioned model catalog with lifecycle management and automated deployment
+- **Real-time Monitoring**: Intelligent drift detection and performance analytics
+- **Vector Database**: Semantic search and document similarity for ML applications
+
+### 🔐 Enterprise Ready
+- **Multi-Provider LLM Support**: OpenAI, Anthropic, and Hugging Face integrations
+- **Compliance & Security**: Role-based access control and comprehensive audit logs
+- **Scalable Architecture**: Kubernetes-native with auto-scaling capabilities
+- **Developer Experience**: Modern React UI with Jupyter integration and API-first design
 
 ## 🏗 Architecture
 
 ```
-lumina-ops/
-├── frontend/                 # React/Next.js web application
-├── backend/                  # FastAPI backend services
-├── ml-services/             # ML-specific microservices
-├── data-lakehouse/          # Data storage and management
-├── infrastructure/          # Kubernetes/Docker configs
-├── docs/                    # Documentation
-├── scripts/                 # Automation scripts
-└── tests/                   # Testing suite
+LuminaOps/
+├── frontend/                    # React 18 + TypeScript + Ant Design v5
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   ├── pages/             # Main application pages
+│   │   │   ├── AIAssistant.tsx    # AI chat interface
+│   │   │   ├── AutoMLTraining.tsx # AutoML training interface  
+│   │   │   ├── Dashboard.tsx      # Main dashboard
+│   │   │   ├── Experiments.tsx    # ML experiments management
+│   │   │   ├── Models.tsx         # Model registry
+│   │   │   └── Pipelines.tsx      # Pipeline orchestration
+│   │   ├── services/          # API integration layer
+│   │   │   └── api.ts            # Enhanced with AI endpoints
+│   │   └── store/             # State management
+│   └── dist/                  # Built application assets
+├── backend/                     # FastAPI + AI Services
+│   ├── api/                   # REST API endpoints
+│   │   └── v1/                
+│   │       ├── ai/            # AI service endpoints
+│   │       ├── experiments/   # Experiment management
+│   │       ├── models/        # Model operations
+│   │       └── pipelines/     # Pipeline management
+│   ├── ai_services/           # AI service implementations
+│   │   ├── llm/              # Large Language Model integrations
+│   │   ├── automl/           # Automated ML services
+│   │   ├── vector_db/        # Vector database operations
+│   │   └── assistant/        # AI assistant logic
+│   ├── core/                 # Core platform services
+│   ├── data/                 # Data processing utilities
+│   ├── venv/                 # Python virtual environment
+│   └── main.py               # Application entry point
+├── docs/                       # Documentation
+├── scripts/                    # Automation and deployment scripts
+└── start_servers.sh           # Quick start script
+```
+
+### 🔄 Data Flow
+
+```
+User Request → React Frontend → FastAPI Backend → AI Services → Response
+     ↓              ↓              ↓              ↓
+1. UI Interaction  2. API Call    3. Processing   4. AI Integration
+   - Form Submit   - Auth Check   - Data Prep    - LLM Query
+   - File Upload   - Validation   - ML Training  - AutoML Run
+   - Chat Input    - Routing      - Persistence  - Vector Search
 ```
 
 ## 🛠 Technology Stack
 
-- **Frontend**: React/Next.js with TypeScript
-- **Backend**: FastAPI (Python)
-- **Database**: PostgreSQL, Redis
-- **ML Framework**: MLflow, Kubeflow
-- **Data Storage**: MinIO (S3-compatible)
-- **Orchestration**: Kubernetes
-- **Monitoring**: Prometheus + Grafana
+### Frontend
+- **React 18** with TypeScript and Vite
+- **Ant Design v5** for modern UI components
+- **React Query** for efficient data fetching
+- **React Router** for navigation
+
+### Backend & AI Services
+- **FastAPI** with async/await support
+- **Multi-LLM Integration**: OpenAI GPT-4, Anthropic Claude, Hugging Face
+- **AutoML Engines**: FLAML (Microsoft), Auto-sklearn, TPOT
+- **Vector Databases**: ChromaDB, FAISS, Weaviate
+- **ML Frameworks**: Scikit-learn, XGBoost, PyTorch, TensorFlow
+
+### Data & Infrastructure
+- **Database**: PostgreSQL, Redis, SQLite (dev)
+- **Data Storage**: MinIO (S3-compatible), local filesystem
+- **Orchestration**: Kubernetes, Docker Compose
+- **Monitoring**: Prometheus + Grafana, built-in metrics
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 
-- Docker & Docker Compose
-- Node.js 18+
-- Python 3.9+
-- Kubernetes (for production)
+- **Node.js 18+** and npm
+- **Python 3.9+** with pip
+- **Git** for version control
+- **Optional**: Docker for containerized deployment
 
 ### Quick Start
 
-1. **Clone and setup:**
+1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd Lumiaops
-   ./scripts/setup.sh
+   git clone https://github.com/jedi132000/LuminaOps.git
+   cd LuminaOps
    ```
 
-2. **Start development environment:**
+2. **Use the automated startup script:**
    ```bash
-   docker-compose up -d
+   chmod +x start_servers.sh
+   ./start_servers.sh
    ```
 
-3. **Access the platform:**
-   - Web UI: http://localhost:3000
-   - API: http://localhost:8000
-   - Jupyter: http://localhost:8888
+   Or start manually:
 
-### Development Setup
-
-1. **Backend setup:**
+3. **Backend setup:**
    ```bash
    cd backend
    python -m venv venv
-   source venv/bin/activate
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
-   uvicorn main:app --reload
+   
+   # Start the backend server
+   PYTHONPATH=. uvicorn main:app --host 0.0.0.0 --port 8002 --reload
    ```
 
-2. **Frontend setup:**
+4. **Frontend setup** (in a new terminal):
    ```bash
    cd frontend
    npm install
+   
+   # Start the frontend server
    npm run dev
    ```
 
-## 📖 Documentation
+5. **Access the platform:**
+   - **Web UI**: http://localhost:3000
+   - **API Documentation**: http://localhost:8002/docs
+   - **API Health Check**: http://localhost:8002/health
 
-- [API Documentation](./docs/api.md)
-- [User Guide](./docs/user-guide.md)
-- [Developer Guide](./docs/developer-guide.md)
-- [Deployment Guide](./docs/deployment.md)
+### 🔑 Environment Configuration
 
-## 🧪 Testing
+Create a `.env` file in the backend directory for AI services:
 
-```bash
-# Run all tests
-./scripts/test.sh
+```env
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_api_key_here
 
-# Backend tests
-cd backend && pytest
+# Anthropic Configuration  
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
-# Frontend tests
-cd frontend && npm test
+# Hugging Face Configuration
+HUGGINGFACE_TOKEN=your_huggingface_token_here
+
+# Database Configuration (optional)
+DATABASE_URL=sqlite:///./app.db
 ```
 
-## 🚢 Deployment
+### 📱 Platform Navigation
 
-See [Deployment Guide](./docs/deployment.md) for detailed instructions.
+Once running, explore these key features:
+
+- **📊 Dashboard**: Overview of experiments, models, and system health
+- **🧪 Experiments**: Create and manage ML experiments with interactive forms
+- **🤖 AI Assistant**: Chat with AI for ML guidance, code generation, and explanations
+- **⚡ AutoML Training**: Upload CSV files for automated ML model training
+- **🏗 Models**: Register, version, and deploy ML models
+- **🔄 Pipelines**: Orchestrate ML workflows and data processing
+- **📈 Monitoring**: Real-time system metrics and model performance
+
+## 🎯 AI Features in Detail
+
+### 🤖 AI Assistant
+- **Text Generation**: Get explanations, tutorials, and ML guidance from integrated LLMs
+- **Code Generation**: Generate Python ML code from natural language descriptions
+- **Data Analysis**: Upload CSV files for AI-powered insights and recommendations
+- **Model Suggestions**: Receive intelligent recommendations for ML models based on your data
+
+### ⚡ AutoML Training
+- **Drag & Drop Interface**: Simple CSV upload with automatic data type detection
+- **Multiple Engines**: Choose from FLAML, Auto-sklearn, or TPOT for automated training
+- **Real-time Progress**: Live training updates with performance metrics
+- **Model Comparison**: Compare multiple trained models with detailed metrics
+- **Configurable Parameters**: Adjust time budgets, problem types, and model preferences
+
+### 🔍 Vector Database Integration
+- **Semantic Search**: Find similar documents and data using AI embeddings
+- **Knowledge Base**: Build searchable repositories of ML knowledge and documentation
+- **Context-Aware Recommendations**: Get suggestions based on your data patterns
+
+## 📖 Documentation & Examples
+
+### API Endpoints
+- **Interactive API Docs**: http://localhost:8002/docs (Swagger UI)
+- **AI Services**: `/api/v1/ai/llm/`, `/api/v1/ai/automl/`, `/api/v1/ai/vector-db/`
+- **Core Platform**: `/api/v1/experiments/`, `/api/v1/models/`, `/api/v1/pipelines/`
+
+### Example Workflows
+1. **Quick ML Model**: Upload CSV → Configure AutoML → Train → Deploy
+2. **AI-Assisted Development**: Ask AI Assistant → Generate Code → Run Experiment
+3. **Data Exploration**: Upload Dataset → Get AI Analysis → Create Experiment
+
+## 🧪 Testing & Development
+
+```bash
+# Frontend build and testing
+cd frontend
+npm run build    # Build for production
+npm run test     # Run test suite
+npm run lint     # Code quality checks
+
+# Backend testing
+cd backend  
+pytest           # Run Python tests
+uvicorn main:app --reload  # Development server
+
+# Full application testing
+./start_servers.sh  # Start both servers
+curl http://localhost:8002/health  # Test backend
+curl http://localhost:3000/        # Test frontend
+```
+
+## 🚢 Production Deployment
+
+### Docker Deployment
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or build individual services
+docker build -t lumina-backend ./backend
+docker build -t lumina-frontend ./frontend
+```
+
+### Environment Variables
+```env
+# Production settings
+NODE_ENV=production
+VITE_API_URL=https://your-api-domain.com
+
+# Security
+JWT_SECRET_KEY=your-secure-jwt-secret
+DATABASE_URL=postgresql://user:pass@host:5432/lumina
+
+# AI Service Keys (required for full functionality)
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+HUGGINGFACE_TOKEN=hf_...
+```
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+We welcome contributions! Here's how to get started:
+
+1. **Fork the repository** and clone locally
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** and add tests
+4. **Commit your changes**: `git commit -m 'Add amazing feature'`
+5. **Push to the branch**: `git push origin feature/amazing-feature`
+6. **Submit a Pull Request** with a clear description
+
+### Development Guidelines
+- Follow TypeScript/Python type annotations
+- Add tests for new features
+- Update documentation for API changes
+- Use conventional commit messages
+- Ensure all CI checks pass
+
+## 🆘 Support & Community
+
+- **📚 Documentation**: Comprehensive guides and API references
+- **🐛 Issues**: [GitHub Issues](https://github.com/jedi132000/LuminaOps/issues) for bug reports
+- **💬 Discussions**: [GitHub Discussions](https://github.com/jedi132000/LuminaOps/discussions) for questions
+- **📧 Contact**: Reach out for enterprise support and custom implementations
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
 
-## 🆘 Support
+## 🌟 Star History
 
-- Documentation: [docs/](./docs/)
-- Issues: [GitHub Issues](https://github.com/your-org/lumina-ops/issues)
-- Discussions: [GitHub Discussions](https://github.com/your-org/lumina-ops/discussions)
+If you find LuminaOps helpful, please give it a star ⭐ to support the project!
+
+---
+
+**Built with ❤️ by the LuminaOps Team** | **Powered by AI for the Future of ML**
