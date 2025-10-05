@@ -59,9 +59,18 @@ coverage/
 ehthumbs.db
 Thumbs.db
 
-# Data directories
-/data/
+# Data directories (ignore sensitive data but allow sample datasets)
+/data/storage/
+/data/mlflow/
+/data/artifacts/
+/data/models/
+/data/logs/
 /backend/data/
+# Allow sample datasets
+!/data/dummy.csv
+!/data/sample.csv
+!/data/model_metrics_timeseries.csv
+!/data/README.md
 
 # ML artifacts
 /ml-services/models/
