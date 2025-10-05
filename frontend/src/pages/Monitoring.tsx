@@ -36,7 +36,7 @@ import {
   UserOutlined,
   DownloadOutlined
 } from '@ant-design/icons';
-import { monitoringAPI } from '../services/api';
+// import { monitoringAPI } from '../services/api'; // Will be used for real API calls
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -368,7 +368,7 @@ const Monitoring: React.FC = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: any) => (
+      render: () => (
         <Space>
           <Tooltip title="View detailed metrics and trends">
             <Button size="small" icon={<LineChartOutlined />} />
