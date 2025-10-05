@@ -1,9 +1,11 @@
-import React from 'react';
-import { Card, Table, Button, Tag, Space } from 'antd';
-import { PlayCircleOutlined, StopOutlined, EditOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Table, Button, Tag, Space, Modal, Form, Input, Select, message } from 'antd';
+import { PlayCircleOutlined, StopOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Experiments: React.FC = () => {
-  const experiments = [
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [experiments, setExperiments] = useState([
     {
       key: '1',
       name: 'Image Classification v2',
@@ -31,7 +33,27 @@ const Experiments: React.FC = () => {
       created: '2024-01-13',
       framework: 'Scikit-learn',
     },
-  ];
+  ]);
+
+  const handleCreateExperiment = async (values: any) => {
+    try {
+      const newExperiment = {
+        key: String(experiments.length + 1),
+        name: values.name,
+        status: 'ready',
+        accuracy: 0,
+        loss: 0,
+        created: new Date().toISOString().split('T')[0],
+        framework: values.framework,
+      };
+      setExperiments([...experiments, newExperiment]);
+      setIsModalVisible(false);
+      form.resetFields();
+      message.success('Experiment created successfully!');
+    } catch (error) {
+      message.error('Failed to create experiment');
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -116,7 +138,9 @@ const Experiments: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Experiments</h1>
-        <Button type="primary">Create New Experiment</Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
+          Create New Experiment
+        </Button>
       </div>
       
       <Card>
@@ -130,6 +154,42 @@ const Experiments: React.FC = () => {
           }}
         />
       </Card>
+      
+      <Modal
+        title="Create New Experiment"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onOk={form.submit}
+        okText="Create"
+        cancelText="Cancel"
+      >
+        <Form
+          form={form}
+          onFinish={handleCreateExperiment}
+          layout="vertical"
+        >
+          <Form.Item
+            name="name"
+            label="Experiment Name"
+            rules={[{ required: true, message: 'Please input experiment name!' }]}
+          >
+            <Input placeholder="Enter experiment name" />
+          </Form.Item>
+          
+          <Form.Item
+            name="framework"
+            label="Framework"
+            rules={[{ required: true, message: 'Please select a framework!' }]}
+          >
+            <Select placeholder="Select framework">
+              <Select.Option value="PyTorch">PyTorch</Select.Option>
+              <Select.Option value="TensorFlow">TensorFlow</Select.Option>
+              <Select.Option value="Scikit-learn">Scikit-learn</Select.Option>
+              <Select.Option value="Keras">Keras</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

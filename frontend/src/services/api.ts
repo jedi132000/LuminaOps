@@ -137,20 +137,121 @@ export const monitoringAPI = {
     return response.data
   },
   
-  getHealth: async (): Promise<SystemHealth> => {
-    const response = await api.get('/monitoring/health')
+  getSystemHealth: async (): Promise<SystemHealth> => {
+    const response = await api.get('/monitoring/system-health')
     return response.data
   },
-  
-  getAlerts: async () => {
-    const response = await api.get('/monitoring/alerts')
+}
+
+// AI Services API
+export const aiAPI = {
+  // LLM Services
+  generateText: async (prompt: string, options?: {
+    provider?: string
+    model?: string
+    temperature?: number
+    maxTokens?: number
+    systemPrompt?: string
+  }) => {
+    const response = await api.post('/ai/llm/generate', {
+      prompt,
+      provider: options?.provider || 'openai',
+      model_name: options?.model || 'gpt-4-turbo-preview',
+      temperature: options?.temperature || 0.7,
+      max_tokens: options?.maxTokens || 1000,
+      system_prompt: options?.systemPrompt
+    })
     return response.data
   },
-  
-  getDashboardData: async () => {
-    const response = await api.get('/monitoring/dashboard')
+
+  generateCode: async (taskDescription: string, options?: {
+    codeType?: string
+    language?: string
+  }) => {
+    const response = await api.post('/ai/llm/generate-code', {
+      task_description: taskDescription,
+      code_type: options?.codeType || 'python_ml',
+      language: options?.language || 'python'
+    })
     return response.data
   },
+
+  explainCode: async (code: string) => {
+    const response = await api.post('/ai/llm/explain-code', { code })
+    return response.data
+  },
+
+  // Data Analysis Services
+  analyzeData: async (file: File, analysisType: string = 'summary') => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('analysis_type', analysisType)
+    
+    const response = await api.post('/ai/assistant/analyze-data', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data
+  },
+
+  recommendModel: async (datasetInfo: any, problemDescription: string) => {
+    const response = await api.post('/ai/assistant/recommend-model', {
+      dataset_info: datasetInfo,
+      problem_description: problemDescription
+    })
+    return response.data
+  },
+
+  // AutoML Services
+  trainAutoML: async (file: File, options: {
+    targetColumn: string
+    problemType: string
+    modelType?: string
+    timeBudget?: number
+  }) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('target_column', options.targetColumn)
+    formData.append('problem_type', options.problemType)
+    formData.append('model_type', options.modelType || 'flaml')
+    formData.append('time_budget', options.timeBudget?.toString() || '300')
+    
+    const response = await api.post('/ai/automl/upload-and-train', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data
+  },
+
+  listAutoMLModels: async () => {
+    const response = await api.get('/ai/automl/models')
+    return response.data
+  },
+
+  predictAutoML: async (modelId: string, data: any[]) => {
+    const response = await api.post(`/ai/automl/predict/${modelId}`, data)
+    return response.data
+  },
+
+  // Vector Database Services
+  addDocuments: async (documents: Array<{
+    id: string
+    content: string
+    metadata?: Record<string, any>
+  }>) => {
+    const response = await api.post('/ai/vector-db/add-documents', documents)
+    return response.data
+  },
+
+  searchDocuments: async (query: string, topK: number = 10) => {
+    const response = await api.post('/ai/vector-db/search', {
+      query,
+      top_k: topK
+    })
+    return response.data
+  }
 }
 
 export default api

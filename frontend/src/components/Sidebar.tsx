@@ -7,6 +7,8 @@ import {
   DatabaseOutlined,
   DeploymentUnitOutlined,
   MonitorOutlined,
+  RobotOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -39,6 +41,16 @@ export const Sidebar: React.FC = () => {
       key: '/monitoring',
       icon: <MonitorOutlined />,
       label: <Link to="/monitoring">Monitoring</Link>,
+    },
+    {
+      key: '/ai-assistant',
+      icon: <RobotOutlined />,
+      label: <Link to="/ai-assistant">AI Assistant</Link>,
+    },
+    {
+      key: '/automl',
+      icon: <ThunderboltOutlined />,
+      label: <Link to="/automl">AutoML</Link>,
     },
   ];
 

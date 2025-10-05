@@ -1,9 +1,11 @@
-import React from 'react';
-import { Card, Table, Button, Tag, Space, Progress } from 'antd';
-import { PlayCircleOutlined, StopOutlined, EditOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Table, Button, Tag, Space, Progress, Modal, Form, Input, Select, message } from 'antd';
+import { PlayCircleOutlined, StopOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Pipelines: React.FC = () => {
-  const pipelines = [
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [pipelines, setPipelines] = useState([
     {
       key: '1',
       name: 'Data Ingestion Pipeline',
@@ -34,7 +36,28 @@ const Pipelines: React.FC = () => {
       success: 18,
       failures: 3,
     },
-  ];
+  ]);
+
+  const handleCreatePipeline = async (values: any) => {
+    try {
+      const newPipeline = {
+        key: String(pipelines.length + 1),
+        name: values.name,
+        status: 'stopped',
+        progress: 0,
+        lastRun: 'Never',
+        nextRun: values.schedule || 'Manual',
+        success: 0,
+        failures: 0,
+      };
+      setPipelines([...pipelines, newPipeline]);
+      setIsModalVisible(false);
+      form.resetFields();
+      message.success('Pipeline created successfully!');
+    } catch (error) {
+      message.error('Failed to create pipeline');
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -131,7 +154,9 @@ const Pipelines: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Pipelines</h1>
-        <Button type="primary">Create New Pipeline</Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
+          Create New Pipeline
+        </Button>
       </div>
       
       <Card>
@@ -145,6 +170,42 @@ const Pipelines: React.FC = () => {
           }}
         />
       </Card>
+      
+      <Modal
+        title="Create New Pipeline"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onOk={form.submit}
+        okText="Create"
+        cancelText="Cancel"
+      >
+        <Form
+          form={form}
+          onFinish={handleCreatePipeline}
+          layout="vertical"
+        >
+          <Form.Item
+            name="name"
+            label="Pipeline Name"
+            rules={[{ required: true, message: 'Please input pipeline name!' }]}
+          >
+            <Input placeholder="Enter pipeline name" />
+          </Form.Item>
+          
+          <Form.Item
+            name="schedule"
+            label="Schedule"
+          >
+            <Select placeholder="Select schedule" allowClear>
+              <Select.Option value="Manual">Manual</Select.Option>
+              <Select.Option value="Hourly">Hourly</Select.Option>
+              <Select.Option value="Daily">Daily</Select.Option>
+              <Select.Option value="Weekly">Weekly</Select.Option>
+              <Select.Option value="Monthly">Monthly</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

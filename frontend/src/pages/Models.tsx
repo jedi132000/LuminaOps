@@ -1,9 +1,11 @@
-import React from 'react';
-import { Card, Table, Button, Tag, Space } from 'antd';
-import { DeploymentUnitOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Table, Button, Tag, Space, Modal, Form, Input, Select, message } from 'antd';
+import { DeploymentUnitOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Models: React.FC = () => {
-  const models = [
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [models, setModels] = useState([
     {
       key: '1',
       name: 'ResNet-50 v1.2',
@@ -34,7 +36,28 @@ const Models: React.FC = () => {
       created: '2024-01-10',
       size: '5.2 MB',
     },
-  ];
+  ]);
+
+  const handleCreateModel = async (values: any) => {
+    try {
+      const newModel = {
+        key: String(models.length + 1),
+        name: values.name,
+        version: '1.0.0',
+        framework: values.framework,
+        status: 'ready',
+        accuracy: 0,
+        created: new Date().toISOString().split('T')[0],
+        size: '0 MB',
+      };
+      setModels([...models, newModel]);
+      setIsModalVisible(false);
+      form.resetFields();
+      message.success('Model registered successfully!');
+    } catch (error) {
+      message.error('Failed to register model');
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -123,7 +146,9 @@ const Models: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Models</h1>
-        <Button type="primary">Register New Model</Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
+          Register New Model
+        </Button>
       </div>
       
       <Card>
@@ -137,6 +162,43 @@ const Models: React.FC = () => {
           }}
         />
       </Card>
+      
+      <Modal
+        title="Register New Model"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onOk={form.submit}
+        okText="Register"
+        cancelText="Cancel"
+      >
+        <Form
+          form={form}
+          onFinish={handleCreateModel}
+          layout="vertical"
+        >
+          <Form.Item
+            name="name"
+            label="Model Name"
+            rules={[{ required: true, message: 'Please input model name!' }]}
+          >
+            <Input placeholder="Enter model name" />
+          </Form.Item>
+          
+          <Form.Item
+            name="framework"
+            label="Framework"
+            rules={[{ required: true, message: 'Please select a framework!' }]}
+          >
+            <Select placeholder="Select framework">
+              <Select.Option value="PyTorch">PyTorch</Select.Option>
+              <Select.Option value="TensorFlow">TensorFlow</Select.Option>
+              <Select.Option value="Scikit-learn">Scikit-learn</Select.Option>
+              <Select.Option value="Keras">Keras</Select.Option>
+              <Select.Option value="XGBoost">XGBoost</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

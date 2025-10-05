@@ -7,6 +7,8 @@ import Experiments from './pages/Experiments'
 import Models from './pages/Models'
 import Pipelines from './pages/Pipelines'
 import Monitoring from './pages/Monitoring'
+import AIAssistant from './pages/AIAssistant'
+import AutoMLTraining from './pages/AutoMLTraining'
 import Login from './pages/Login'
 import { useAuthStore } from './store/authStore'
 
@@ -37,6 +39,8 @@ function App() {
               <Route path="/models" element={<Models />} />
               <Route path="/pipelines" element={<Pipelines />} />
               <Route path="/monitoring" element={<Monitoring />} />
+              <Route path="/ai-assistant" element={<AIAssistant />} />
+              <Route path="/automl" element={<AutoMLTraining />} />
             </Routes>
           </Content>
         </Layout>
