@@ -8,6 +8,7 @@ from enum import Enum
 import asyncio
 import json
 from dataclasses import dataclass
+from core.config import settings
 
 try:
     import openai
@@ -46,12 +47,18 @@ class LLMService:
         """Initialize a specific LLM provider"""
         try:
             if config.provider == LLMProvider.OPENAI:
+                api_key = config.api_key or settings.OPENAI_API_KEY
+                if not api_key:
+                    raise ValueError("OpenAI API key not configured")
                 self.providers[config.provider] = openai.AsyncOpenAI(
-                    api_key=config.api_key
+                    api_key=api_key
                 )
             elif config.provider == LLMProvider.ANTHROPIC:
+                api_key = config.api_key or settings.ANTHROPIC_API_KEY
+                if not api_key:
+                    raise ValueError("Anthropic API key not configured")
                 self.providers[config.provider] = Anthropic(
-                    api_key=config.api_key
+                    api_key=api_key
                 )
             elif config.provider == LLMProvider.HUGGINGFACE:
                 # Initialize Hugging Face pipeline
