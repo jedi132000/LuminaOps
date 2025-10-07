@@ -36,6 +36,7 @@ const Login: React.FC = () => {
           email: `${values.username}@example.com`,
           is_active: true,
           created_at: new Date().toISOString(),
+          premium_credits: 1500,
         };
         
         console.log('👤 User object:', mockUser);

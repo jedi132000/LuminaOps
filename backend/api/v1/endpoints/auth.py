@@ -25,6 +25,7 @@ class UserResponse(BaseModel):
     email: str
     is_active: bool
     created_at: datetime
+    premium_credits: int = 0
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create JWT access token."""
@@ -89,7 +90,8 @@ async def get_current_user(username: str = Depends(verify_token)):
         username=username,
         email=f"{username}@example.com",
         is_active=True,
-        created_at=datetime.utcnow()
+        created_at=datetime.utcnow(),
+        premium_credits=1500
     )
 
 @router.post("/refresh")
